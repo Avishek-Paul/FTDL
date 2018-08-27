@@ -41,7 +41,11 @@
     background: rgb(196, 0, 0);
   }
 
-  .create-button, .search-button, #show-create-button, #show-search-button{
+  .update-button:hover,.update-button:active,.update-button:focus {
+    background: rgb(196, 0, 0);
+  }  
+
+  .create-button, .search-button, .update-button, #show-create-button, #show-search-button{
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;

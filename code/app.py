@@ -7,12 +7,12 @@ import time
 import pymongo
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from conf.settings import Config
-from forms import LoginForm, CreateTask, SearchTask
+from forms import LoginForm, CreateTask, SearchTask, updateTask
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-client = pymongo.MongoClient("mongodb+srv://apaul18:mypassword@cluster0-3mne1.mongodb.net")
+client = pymongo.MongoClient("mongodb+srv://apaul18:{}@cluster0-3mne1.mongodb.net".format(Config.password))
 db = client.ToDoList
 all_tasks = db.Tasks
 
@@ -98,6 +98,7 @@ def main():
 
     form = CreateTask()
     search = SearchTask()
+    update = updateTask()
     
     show_results = False
     initial = True
@@ -109,13 +110,15 @@ def main():
         results = json.loads(raw_results.text)
         if results['success']:
             data = results['data']
+            update.title.data = data['title']
+            update.author.data = data['author']
+            update.content.data = data['content']
+            update.assignees.data = data['assignees']
             show_results = True
-            # return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=True, initial=False, **data)
 
     if form.validate_on_submit():
 
         initial = True
-        
         params = {
             'title' : form.title.data,
             'author' : form.author.data,
@@ -134,9 +137,10 @@ def main():
             if results['success']:
                 data = results['data']
                 show_results = True
-                # return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=True, initial=True, **data)
 
-    return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=show_results,
+    return render_template("main.html", page_title='To Do List', form=form, search=search, 
+                            update=update,
+                            show_results=show_results,
                             initial=initial, **data)
 
 if __name__ == "__main__":

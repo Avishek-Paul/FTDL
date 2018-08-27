@@ -18,3 +18,10 @@ class CreateTask(FlaskForm):
 class SearchTask(FlaskForm):
     id_ = StringField('ID', validators=[DataRequired()], render_kw={'placeholder': 'task id'})
     search = SubmitField('Search')
+
+class updateTask(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()], render_kw={'placeholder': 'title'})
+    author = StringField('Author', validators=[DataRequired()], render_kw={'placeholder': 'author'})
+    content = StringField('Content', validators=[DataRequired()], render_kw={'placeholder': 'content'})
+    assignees = StringField('Assignees', validators=[DataRequired()], render_kw={'placeholder': 'assignees'})
+    update = SubmitField('Update')

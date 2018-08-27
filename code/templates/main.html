@@ -72,31 +72,28 @@
 
         {% if show_results %}
             <div class="results">
-                <p>
-                    {{ id }} <br>
-                    {{ title }} <br>
-                    {{ author }} <br>
-                    {{ content }} <br>
-                    {{ assignees }} <br>
-                </p>
+                <strong>id </strong>{{ id }} <br>
+                <strong>title </strong>{{ update.title(size=32, class_="text-form") }} <br>
+                <strong>author </strong>{{ update.author(size=32, class_="text-form") }} <br>
+                <strong>content </strong>{{ update.content(size=32, class_="text-form") }} <br>
+                <strong>assignees </strong>{{ update.assignees(size=32, class_="text-form") }} <br>
+                <p>{{ update.update(class_="update-button") }}</p>                    
             </div>
         {% endif %}
 
     {% endblock %}
-    
-            {% if initial %}
-                <script>
-                    document.querySelector('.create-form').style.display = "";
-                    document.querySelector('.search-form').style.display = "none";
-                </script>    
-            {% else %}
-                <script>
-                    document.querySelector('.create-form').style.display = "none";
-                    document.querySelector('.search-form').style.display = "";
-                </script> 
-            {% endif %}
 
-    
+    {% if initial %}
+        <script>
+            document.querySelector('.create-form').style.display = "";
+            document.querySelector('.search-form').style.display = "none";
+        </script>    
+    {% else %}
+        <script>
+            document.querySelector('.create-form').style.display = "none";
+            document.querySelector('.search-form').style.display = "";
+        </script> 
+    {% endif %}
 
     <script src="{{url_for('static', filename='main.js')}}"></script>
 
