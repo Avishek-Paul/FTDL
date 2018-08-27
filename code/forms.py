@@ -14,3 +14,7 @@ class CreateTask(FlaskForm):
     content = StringField('Content', validators=[DataRequired()], render_kw={'placeholder': 'content'})
     assignees = StringField('Assignees', validators=[DataRequired()], render_kw={'placeholder': 'assignees'})
     create = SubmitField('Create')
+
+class SearchTask(FlaskForm):
+    id_ = StringField('ID', validators=[DataRequired()], render_kw={'placeholder': 'task id'})
+    search = SubmitField('Search')

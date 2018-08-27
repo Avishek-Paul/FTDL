@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ page_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='main.css', v=0.0.1)}}"        >
+    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='main.css', v=0.0.4)}}">
 </head>
 
 <body>
-    <div class="form">
+    <div class=main-page>
+
+        <div class="form">
+    
+            <button id="show-create-button"> Create </button>
+            <button id="show-search-button"> Search </button>
                 
             {% block content %}
             <form class="create-form" action="" method="post" novalidate>
@@ -39,10 +44,27 @@
                     {% endfor %}            
                 </p>
 
-                <p>{{ form.create(class_="submit-button") }}</p>
+                <p>{{ form.create(class_="create-button") }}</p>
             </form>
+
+            <form class="search-form" action="" method="post" novalidate>
+
+                {{ search.hidden_tag() }}
+
+                <p>
+                    {{ search.id_(size=32, class_="text-form") }}
+                    {% for error in search.id_.errors %}
+                    <span style="color: #8B0000;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+
+                <p>{{ search.search(class_="search-button") }}</p>
+
+            </form>
+
             {% endblock %}
                         
+    </div>
     </div>
 
     
@@ -61,7 +83,22 @@
         {% endif %}
 
     {% endblock %}
+    
+            {% if initial %}
+                <script>
+                    document.querySelector('.create-form').style.display = "";
+                    document.querySelector('.search-form').style.display = "none";
+                </script>    
+            {% else %}
+                <script>
+                    document.querySelector('.create-form').style.display = "none";
+                    document.querySelector('.search-form').style.display = "";
+                </script> 
+            {% endif %}
 
+    
+
+    <script src="{{url_for('static', filename='main.js')}}"></script>
 
 </body>
 </html>

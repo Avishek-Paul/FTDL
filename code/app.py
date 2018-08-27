@@ -7,7 +7,7 @@ import time
 import pymongo
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from conf.settings import Config
-from forms import LoginForm, CreateTask
+from forms import LoginForm, CreateTask, SearchTask
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -25,7 +25,7 @@ def index():
 
     return render_template("login.html", title='Sign In', form=form)
 
-@app.route('/newtask/', methods=['GET'])
+@app.route('/newtask/', methods=['POST'])
 def newtask():
     
     data = request.args.to_dict()
@@ -79,7 +79,7 @@ def findtask():
     else:
         return json.dumps({"success":False, "reason": "Improper Inputs"}), 400, {"ContentType":"application/json"}
 
-@app.route('/deletetask/', methods=['GET'])
+@app.route('/deletetask/', methods=['POST'])
 def deletetask():
     data = request.args.to_dict()
 
@@ -97,9 +97,25 @@ def deletetask():
 def main():
 
     form = CreateTask()
+    search = SearchTask()
     
+    show_results = False
+    initial = True
+    data = {}
+
+    if search.validate_on_submit():
+        initial = False
+        raw_results = requests.get('http://127.0.0.1:5000/findtask/', params={'id':search.id_.data.strip()})
+        results = json.loads(raw_results.text)
+        if results['success']:
+            data = results['data']
+            show_results = True
+            # return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=True, initial=False, **data)
+
     if form.validate_on_submit():
 
+        initial = True
+        
         params = {
             'title' : form.title.data,
             'author' : form.author.data,
@@ -107,7 +123,7 @@ def main():
             'assignees' : form.assignees.data
         }
 
-        raw_response = requests.get('http://127.0.0.1:5000/newtask/', params=params)
+        raw_response = requests.post('http://127.0.0.1:5000/newtask/', params=params)
         response = json.loads(raw_response.text)
 
         if response['success'] and 'id' in response:
@@ -117,12 +133,11 @@ def main():
 
             if results['success']:
                 data = results['data']
-        else:
-            results = raw_response.text
+                show_results = True
+                # return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=True, initial=True, **data)
 
-        return render_template("main.html", page_title='To Do List', form=form, show_results=True, **data)
-
-    return render_template("main.html", page_title='To Do List', form=form, show_results=False, data=None)
+    return render_template("main.html", page_title='To Do List', form=form, search=search, show_results=show_results,
+                            initial=initial, **data)
 
 if __name__ == "__main__":
     app.run(threaded=True)
