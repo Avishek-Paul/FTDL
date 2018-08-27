@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ page_title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='main.css', v=0.0.1)}}"        >
+</head>
+
+<body>
+    <div class="form">
+                
+            {% block content %}
+            <form class="create-form" action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.title(size=32, class_="text-form") }}
+                    {% for error in form.title.errors %}
+                    <span style="color: #8B0000;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.author(size=32, class_="text-form") }}   
+                    {% for error in form.author.errors %}
+                    <span style="color: #8B0000;">[{{ error }}]</span>
+                    {% endfor %}            
+                </p>
+                <p>
+                    {{ form.content(size=32, class_="text-form") }}   
+                    {% for error in form.content.errors %}
+                    <span style="color: #8B0000;">[{{ error }}]</span>
+                    {% endfor %}            
+                </p>
+                <p>
+                    {{ form.assignees(size=32, class_="text-form") }}   
+                    {% for error in form.assignees.errors %}
+                    <span style="color: #8B0000;">[{{ error }}]</span>
+                    {% endfor %}            
+                </p>
+
+                <p>{{ form.create(class_="submit-button") }}</p>
+            </form>
+            {% endblock %}
+                        
+    </div>
+
+    
+    {% block results %}
+
+        {% if show_results %}
+            <div class="results">
+                <p>
+                    {{ id }} <br>
+                    {{ title }} <br>
+                    {{ author }} <br>
+                    {{ content }} <br>
+                    {{ assignees }} <br>
+                </p>
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+
+</body>
+</html>
