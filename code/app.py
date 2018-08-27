@@ -32,7 +32,7 @@ def newtask():
 
     if 'title' in data and 'author' in data and 'content' in data and 'assignees' in data:
         post_data = {
-            'id' : str(time.time()).split('.')[0],
+            'id' : "".join(str(time.time()).split('.')),
             'title': data['title'],
             'author': data['author'],
             'content': data['content'],
